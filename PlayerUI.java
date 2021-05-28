@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class PlayerUI extends JFrame implements KeyListener{
     
@@ -16,6 +17,8 @@ public class PlayerUI extends JFrame implements KeyListener{
     int playerX=200;
     int playerY=200;
     boolean p=true;
+    ArrayList<Enemy> enemies=new ArrayList<>();
+    Random random=new Random();
 
     public PlayerUI(ArrayList<String> IorderedSlots, ArrayList<String> IorderedSlotDirections, JPanel[][] IDslots) throws InterruptedException{
 
@@ -45,6 +48,16 @@ public class PlayerUI extends JFrame implements KeyListener{
     }
 
     public void updateRoom(String roomDirection){
+        try{
+            for(Enemy enemy: enemies){
+                this.remove(enemy);
+                enemies.remove(enemy);
+            }
+        }catch(Exception x){}
+        for(int i=0;i<random.nextInt(3)+0;i++){
+            enemies.add(new Enemy());
+            this.add(enemies.get(i));
+        }
         switch(roomDirection){
             case "NORTH":
             roomSlot=roomSlot.split(",")[0]+","+String.valueOf(Integer.valueOf(roomSlot.split(",")[1])+1);
@@ -190,6 +203,10 @@ public class PlayerUI extends JFrame implements KeyListener{
                     System.out.println(orderedSlotDirections);
             break;
             case 'e': Binterface.slot.get(Binterface.equiped).Use();
+            break;
+            case 'q': Binterface.slot.get(Binterface.equiped).setItem("NULL");
+                      Binterface.slot.get(Binterface.equiped).removeAll();
+                      System.out.println("You dropped your Item, because your're clumsy.");
         }
     }
 
