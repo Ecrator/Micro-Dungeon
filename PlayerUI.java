@@ -201,9 +201,7 @@ public class PlayerUI extends JFrame implements KeyListener{
             case 37: Binterface.moveSlot(-1);
         }
     }
-
     @Override
-    public void keyReleased(KeyEvent e) {
-    }
+    public void keyReleased(KeyEvent e) {}
 }
 
