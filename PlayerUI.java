@@ -19,6 +19,7 @@ public class PlayerUI extends JFrame implements KeyListener{
     boolean p=true;
     ArrayList<Enemy> enemies=new ArrayList<>();
     Random random=new Random();
+    AttackVX attackVisual=new AttackVX();
 
     public PlayerUI(ArrayList<String> IorderedSlots, ArrayList<String> IorderedSlotDirections, JPanel[][] IDslots) throws InterruptedException{
 
@@ -32,7 +33,7 @@ public class PlayerUI extends JFrame implements KeyListener{
         player.setSize(new Dimension(10,10));
         Sinterface.setPreferredSize(new Dimension(100,500));
         Binterface.setPreferredSize(new Dimension(500,100));
-        player.setBackground(Color.RED);
+        player.setBackground(Color.GREEN);
         Sinterface.setBackground(Color.GRAY);
         Binterface.setBackground(Color.GRAY);
         playerInterface.setBackground(Color.DARK_GRAY);
@@ -54,10 +55,7 @@ public class PlayerUI extends JFrame implements KeyListener{
                 enemies.remove(enemy);
             }
         }catch(Exception x){}
-        for(int i=0;i<random.nextInt(3)+0;i++){
-            enemies.add(new Enemy());
-            this.add(enemies.get(i));
-        }
+        
         switch(roomDirection){
             case "NORTH":
             roomSlot=roomSlot.split(",")[0]+","+String.valueOf(Integer.valueOf(roomSlot.split(",")[1])+1);
@@ -76,6 +74,12 @@ public class PlayerUI extends JFrame implements KeyListener{
             if(orderedSlots.get(i).equals(roomSlot)){
                 doors.add(orderedSlotDirections.get(i).split(",")[0]);
                 doors.add(orderedSlotDirections.get(i).split(",")[1]);
+            }
+        }
+        if(!(roomSlot.equals("4,4"))&&!(roomSlot.equals(orderedSlots.get(orderedSlots.size()-1)))){
+            for(int i=0;i<random.nextInt(5)+0;i++){
+                enemies.add(new Enemy());
+                this.add(enemies.get(i));
             }
         }
         playerInterface.updateDoors(doors);
@@ -121,8 +125,14 @@ public class PlayerUI extends JFrame implements KeyListener{
     }
 
     public void movePlayer(char direction){
+        for(Enemy enemy: enemies){
+            enemy.moveEnemy(playerX, playerY);
+        }
         try{
-
+            this.remove(attackVisual);
+            this.repaint();
+        }catch(Exception x){}
+        try{
             switch(direction){
                 case 'w':
                 player.setLocation(playerX, playerY-20);
@@ -199,10 +209,29 @@ public class PlayerUI extends JFrame implements KeyListener{
             }
             break;
             case 'c': System.out.println(roomSlot);
-                    System.out.println(orderedSlots);
+                    System.out.println(orderedSlots);       //helps debug
                     System.out.println(orderedSlotDirections);
             break;
             case 'e': Binterface.slot.get(Binterface.equiped).Use();
+                    if(Binterface.slot.get(Binterface.equiped).Item.equals("SWORD")){
+                        this.remove(attackVisual);
+                        attackVisual=new AttackVX("SWORD");
+                        this.add(attackVisual);
+                        attackVisual.setLocation(playerX-15, playerY-15);
+                      for(Enemy enemy: enemies){
+                          enemy.playerAttackedSword(Binterface.slot.get(Binterface.equiped).damage, playerX, playerY);
+                      }
+                    }else if(Binterface.slot.get(Binterface.equiped).Item.equals("BOW")){
+
+                    }
+                    
+
+                    for(Enemy enemy: enemies){
+                        if(enemy.checkDead()){
+                            enemies.remove(enemy);
+                            this.remove(enemy);
+                        }
+                    }
             break;
             case 'q': Binterface.slot.get(Binterface.equiped).setItem("NULL");
                       Binterface.slot.get(Binterface.equiped).removeAll();
