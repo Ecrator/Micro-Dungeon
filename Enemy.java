@@ -48,9 +48,7 @@ public class Enemy extends JPanel{
     }
 
     public void playerAttackedSword(int damage, int playerX, int playerY){
-        if(enemyX<playerX-30||enemyX>playerX+30||enemyY<playerY-30||enemyY>playerY+30){
-            System.out.println("OUT OF RANGE!");
-        }else{
+        if(!(enemyX<playerX-30||enemyX>playerX+30||enemyY<playerY-30||enemyY>playerY+30)){
             health-=damage;
             if(enemyX>playerX){
                 this.setLocation(enemyX+30, enemyY);
@@ -72,6 +70,13 @@ public class Enemy extends JPanel{
 
     public boolean checkDead(){
         if(health<=0){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean attemptAttack(int playerX, int playerY){
+        if(!(enemyX<playerX-20||enemyX>playerX+20||enemyY<playerY-20||enemyY>playerY+20)){
             return true;
         }
         return false;
