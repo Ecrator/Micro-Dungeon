@@ -53,12 +53,13 @@ public class MapGenerator{
         while(orderedSlots.get(randomInt)==orderedSlots.get(orderedSlots.size()-1)||orderedSlots.get(randomInt)==orderedSlots.get(0)){
             randomInt=random.nextInt(orderedSlots.size()-2)+1; //shop slot
         }
-        JPanel ShopSlot=Dslots[Integer.valueOf(orderedSlots.get(randomInt).split(",")[0])][Integer.valueOf(orderedSlots.get(randomInt).split(",")[1])];
-        ShopSlot.setBackground(Color.CYAN);
+        JPanel JShopSlot=Dslots[Integer.valueOf(orderedSlots.get(randomInt).split(",")[0])][Integer.valueOf(orderedSlots.get(randomInt).split(",")[1])];
+        String ShopSlot=String.valueOf(orderedSlots.get(randomInt).split(",")[0])+","+String.valueOf(orderedSlots.get(randomInt).split(",")[1]);
+        JShopSlot.setBackground(Color.CYAN);
         
         drawPaths();
 
-        PlayerUI playerInterface=new PlayerUI(orderedSlots, orderedSlotDirections, Dslots);
+        PlayerUI playerInterface=new PlayerUI(orderedSlots, orderedSlotDirections, Dslots, ShopSlot);
         //for(String slotD: orderedSlotDirections){
            // System.out.println(slotD);
         //}

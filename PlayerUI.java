@@ -9,6 +9,7 @@ public class PlayerUI extends JFrame implements KeyListener{
     ArrayList<String> orderedSlots;
     ArrayList<String> orderedSlotDirections;
     String roomSlot="4,4";
+    String shopSlot;
     JPanel[][] Dslots;
     RoomGraph playerInterface=new RoomGraph();
     JPanel Sinterface=new JPanel();
@@ -22,16 +23,19 @@ public class PlayerUI extends JFrame implements KeyListener{
     StatVX coinVX=new StatVX("COIN");
     Double armor=0.00;
     char playerDirection='w';
-    boolean p=true;
+    boolean inShopRoom=false;
+    boolean helmetE, bootsE, shieldE=false;
     ArrayList<Enemy> enemies=new ArrayList<>();
     Random random=new Random();
     AttackVX attackVisual=new AttackVX();
+    Shop shop=new Shop(Binterface, this);
 
-    public PlayerUI(ArrayList<String> IorderedSlots, ArrayList<String> IorderedSlotDirections, JPanel[][] IDslots) throws InterruptedException{
+    public PlayerUI(ArrayList<String> IorderedSlots, ArrayList<String> IorderedSlotDirections, JPanel[][] IDslots, String IshopSlot) throws InterruptedException{
 
         orderedSlots=IorderedSlots;
         orderedSlotDirections=IorderedSlotDirections;
         Dslots=IDslots;
+        shopSlot=IshopSlot;
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(500,500);
         this.setResizable(false);
@@ -90,6 +94,11 @@ public class PlayerUI extends JFrame implements KeyListener{
             for(int i=0;i<random.nextInt(5)+0;i++){
                 enemies.add(new Enemy());
             }
+        }
+        if(roomSlot.equals(shopSlot)){
+            inShopRoom=true;
+        }else{
+            inShopRoom=false;
         }
         for(Enemy enemy: enemies){
             this.add(enemy);
@@ -235,10 +244,13 @@ public class PlayerUI extends JFrame implements KeyListener{
                     //System.out.println(orderedSlots);       //helps debug
                     //System.out.println(orderedSlotDirections);
                     //System.out.println(enemies.size());
-                    System.out.println(playerHealth);
+                    //System.out.println(playerHealth);
+                    //System.out.println(shopSlot);
+                    //System.out.println(armor);
+
             break;
             case 'e': Binterface.slot.get(Binterface.equiped).Use();
-                    if(Binterface.slot.get(Binterface.equiped).Item.equals("SWORD")){
+                    if(Binterface.slot.get(Binterface.equiped).Item.equals("SWORD")||Binterface.slot.get(Binterface.equiped).Item.equals("MACE")){
                         this.remove(attackVisual);
                         attackVisual=new AttackVX("SWORD");
                         this.add(attackVisual);
@@ -247,7 +259,38 @@ public class PlayerUI extends JFrame implements KeyListener{
                           enemy.playerAttackedSword(Binterface.slot.get(Binterface.equiped).damage, playerX, playerY);
                       }
                     }else if(Binterface.slot.get(Binterface.equiped).Item.equals("BOW")){
-
+                        for(Enemy enemy: enemies){
+                            enemy.playerAttackedBow(playerX, playerY, Binterface.slot.get(Binterface.equiped).damage);
+                        }
+                    }else if(Binterface.slot.get(Binterface.equiped).Item.equals("BOOTS")||Binterface.slot.get(Binterface.equiped).Item.equals("HELMET")||Binterface.slot.get(Binterface.equiped).Item.equals("SHIELD")){
+                        if(Binterface.slot.get(Binterface.equiped).Item.equals("BOOTS")&&(bootsE)){
+                            break;
+                        }else if((Binterface.slot.get(Binterface.equiped).Item.equals("HELMET")&&(helmetE))){
+                            break;
+                        }else if((Binterface.slot.get(Binterface.equiped).Item.equals("SHIELD")&&(shieldE))){
+                            break;
+                        }else{
+                            if(Binterface.slot.get(Binterface.equiped).Item.equals("BOOTS")){
+                                bootsE=true;
+                            }else if(Binterface.slot.get(Binterface.equiped).Item.equals("HELMET")){
+                                helmetE=true;
+                            }else if(Binterface.slot.get(Binterface.equiped).Item.equals("SHIELD")){
+                                shieldE=true;
+                            }
+                            armor+=0.25;
+                            armorVX.updateArmor(armor);
+                            Binterface.slot.get(Binterface.equiped).setItem("NULL");
+                            Binterface.slot.get(Binterface.equiped).removeAll();
+                            Binterface.repaint();
+                        }
+                        
+                    }else if(Binterface.slot.get(Binterface.equiped).Item.equals("BANDAGE")){
+                        playerHealth+=1;
+                        healthVX.updateHealth(playerHealth);
+                        healthVX.repaint();
+                        Binterface.slot.get(Binterface.equiped).setItem("NULL");
+                        Binterface.slot.get(Binterface.equiped).removeAll();
+                        Binterface.repaint();
                     }
                     
                     try{
@@ -255,13 +298,29 @@ public class PlayerUI extends JFrame implements KeyListener{
                             if(enemy.checkDead()){
                                 enemies.remove(enemy);
                                 this.remove(enemy);
+                                coinVX.coins+=1;
+                                coinVX.updateCoins();
+                                this.remove(attackVisual);
                             }
                         }
                     }catch(Exception x){}
             break;
             case 'q': Binterface.slot.get(Binterface.equiped).setItem("NULL");
                       Binterface.slot.get(Binterface.equiped).removeAll();
+                      Binterface.repaint();
                       System.out.println("You dropped your Item, because your're clumsy.");
+            break;
+            case 'i': 
+            if(inShopRoom){
+                try{
+                    for(int i=0;i<enemies.size();i++){
+                        this.remove(enemies.get(i));
+                        enemies.remove(i);
+                    }
+                
+                }catch(Exception x){}
+                shop.open();
+            }
         }
     }
 
