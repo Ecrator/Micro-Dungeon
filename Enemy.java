@@ -26,6 +26,7 @@ public class Enemy extends JPanel{
     }
 
     public void moveEnemy(int playerX, int playerY){
+        this.setSize(new Dimension(10,10));
         switch(random.nextInt(2)+1){
             case 1:
             if(playerX<enemyX){
@@ -64,6 +65,26 @@ public class Enemy extends JPanel{
             }else{
                 this.setLocation(enemyX, enemyY-30);
                 enemyY-=30;
+            }
+        }
+    }
+
+    public void playerAttackedBow(int playerX, int playerY, int damage){
+        if(enemyX>playerX-10&&enemyX<playerX+10||enemyY>playerY-10&&enemyY<playerY+10){
+            health-=damage;
+            if(enemyX>playerX){
+                enemyX+=10;
+                this.setLocation(enemyX, enemyY);
+            }else{
+                enemyX-=10;
+                this.setLocation(enemyX, enemyY);
+            }
+            if(enemyY>playerY){
+                enemyY+=10;
+                this.setLocation(enemyX, enemyY);
+            }else{
+                enemyY-=10;
+                this.setLocation(enemyX, enemyY);
             }
         }
     }

@@ -10,7 +10,7 @@ public class HotBar extends JPanel{
     public HotBar(){
      this.setBackground(Color.GRAY);
      this.setLayout(new GridLayout(1,5));
-     slot.add(new Item("SWORD"));
+     slot.add(new Item("BOOTS"));
      slot.add(new Item("BOW"));
      for(int i=0;i<3;i++){
         slot.add(new Item("NULL"));
@@ -26,7 +26,7 @@ public class HotBar extends JPanel{
             equiped=-1;
         }
         if(equiped==0&&direction==-1){
-            equiped=3;
+            equiped=5;
         }
         equiped+=direction;
         for(JPanel slot: slot){
@@ -34,11 +34,25 @@ public class HotBar extends JPanel{
         }
         slot.get(equiped).setBackground(Color.YELLOW);
     }
+
+    public void addItem(String itemID){
+        for(int i=0;i<5;i++){
+            if(slot.get(i).Item.equals("NULL")){
+                slot.remove(i);
+                slot.add(i, new Item(itemID));
+                slot.get(i).setBackground(Color.LIGHT_GRAY);
+                update();
+                break;
+            }
+        }
+    }
     
     public void update(){
         this.removeAll();
         for(int i=0;i<5;i++){
             this.add(slot.get(i));
-         }
+        }
+        this.revalidate();
+        this.repaint();
     }
 }
