@@ -14,7 +14,7 @@ public class Item extends JPanel{
             price=1;
         }else if(ItemID.equals("BOW")){
             this.add(new JLabel("BOW"));
-            price=1;
+            price=15;
         }else if(ItemID.equals("BOOTS")){
             this.add(new JLabel("BOOTS"));
             price=3;
