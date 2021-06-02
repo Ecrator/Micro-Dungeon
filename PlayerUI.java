@@ -24,8 +24,10 @@ public class PlayerUI extends JFrame implements KeyListener{
     Double armor=0.00;
     char playerDirection='w';
     boolean inShopRoom=false;
+    boolean inBossRoom=false;
     boolean helmetE, bootsE, shieldE=false;
     ArrayList<Enemy> enemies=new ArrayList<>();
+    Boss boss=new Boss();
     Random random=new Random();
     AttackVX attackVisual=new AttackVX();
     Shop shop=new Shop(Binterface, this);
@@ -63,6 +65,7 @@ public class PlayerUI extends JFrame implements KeyListener{
     }
 
     public void updateRoom(String roomDirection){
+        shop.setVisible(false);
         try{
             for(Enemy enemy: enemies){
                 this.remove(enemy);
@@ -99,6 +102,16 @@ public class PlayerUI extends JFrame implements KeyListener{
             inShopRoom=true;
         }else{
             inShopRoom=false;
+        }
+        if(roomSlot.equals(orderedSlots.get(orderedSlots.size()-1))){
+            inBossRoom=true;
+            this.add(boss);
+        }else{
+            inBossRoom=false;
+            try{
+                this.remove(boss);
+            }catch(Exception x){}
+            boss.bossHealth=300;
         }
         for(Enemy enemy: enemies){
             this.add(enemy);
@@ -181,6 +194,12 @@ public class PlayerUI extends JFrame implements KeyListener{
                 playerAttacked();
             }
         }
+        if(inBossRoom){
+            boss.moveBoss(playerX, playerY);
+            if(boss.attemptAttack(playerX, playerY)){
+                playerAttacked();
+            }
+        }
     }
 
     public void playerAttacked(){
@@ -247,6 +266,7 @@ public class PlayerUI extends JFrame implements KeyListener{
                     //System.out.println(playerHealth);
                     //System.out.println(shopSlot);
                     //System.out.println(armor);
+                    System.out.println(boss.bossHealth);
 
             break;
             case 'e': Binterface.slot.get(Binterface.equiped).Use();
@@ -258,9 +278,15 @@ public class PlayerUI extends JFrame implements KeyListener{
                       for(Enemy enemy: enemies){
                           enemy.playerAttackedSword(Binterface.slot.get(Binterface.equiped).damage, playerX, playerY);
                       }
+                      if(inBossRoom){
+                          boss.playerAttackedSword(Binterface.slot.get(Binterface.equiped).damage, playerX, playerY);
+                      }
                     }else if(Binterface.slot.get(Binterface.equiped).Item.equals("BOW")){
                         for(Enemy enemy: enemies){
                             enemy.playerAttackedBow(playerX, playerY, Binterface.slot.get(Binterface.equiped).damage);
+                        }
+                        if(inBossRoom){
+                            boss.playerAttackedBow(playerX, playerY, Binterface.slot.get(Binterface.equiped).damage);
                         }
                     }else if(Binterface.slot.get(Binterface.equiped).Item.equals("BOOTS")||Binterface.slot.get(Binterface.equiped).Item.equals("HELMET")||Binterface.slot.get(Binterface.equiped).Item.equals("SHIELD")){
                         if(Binterface.slot.get(Binterface.equiped).Item.equals("BOOTS")&&(bootsE)){
@@ -308,7 +334,7 @@ public class PlayerUI extends JFrame implements KeyListener{
             case 'q': Binterface.slot.get(Binterface.equiped).setItem("NULL");
                       Binterface.slot.get(Binterface.equiped).removeAll();
                       Binterface.repaint();
-                      System.out.println("You dropped your Item, because your're clumsy.");
+                      System.out.println("You dropped your Item because your're clumsy.");
             break;
             case 'i': 
             if(inShopRoom){

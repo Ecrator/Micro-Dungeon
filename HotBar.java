@@ -10,9 +10,8 @@ public class HotBar extends JPanel{
     public HotBar(){
      this.setBackground(Color.GRAY);
      this.setLayout(new GridLayout(1,5));
-     slot.add(new Item("BOOTS"));
      slot.add(new Item("BOW"));
-     for(int i=0;i<3;i++){
+     for(int i=0;i<4;i++){
         slot.add(new Item("NULL"));
         slot.get(i).setBackground(Color.LIGHT_GRAY);
         this.add(slot.get(i));
