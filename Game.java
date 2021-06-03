@@ -9,6 +9,7 @@ public class Game {
         Map.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Map.setSize(500,500);
         Map.setResizable(false);
+        Map.setLocation(900,150);
         Map.setLayout(new GridLayout(10,10));
         for(int i=9;i>-1;i--){
             for(int o=0;o<10;o++){
@@ -19,7 +20,7 @@ public class Game {
             }
         }
         Map.setVisible(true);
-        MapGenerator mapGen=new MapGenerator(slots);
+        MapGenerator mapGen=new MapGenerator(slots, Map);
     }
 
     public JPanel[][] getSlots(){

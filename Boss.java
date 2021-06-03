@@ -84,4 +84,11 @@ public class Boss extends JPanel{
         }
         return false;
     }
+
+    public boolean checkDead(){
+        if(bossHealth<=0){
+            return true;
+        }
+        return false;
+    }
 }
