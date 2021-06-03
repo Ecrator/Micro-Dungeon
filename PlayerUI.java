@@ -28,12 +28,17 @@ public class PlayerUI extends JFrame implements KeyListener{
     boolean helmetE, bootsE, shieldE=false;
     ArrayList<Enemy> enemies=new ArrayList<>();
     Boss boss=new Boss();
+    JProgressBar bossBar=new JProgressBar(0,300);
     Random random=new Random();
     AttackVX attackVisual=new AttackVX();
     Shop shop=new Shop(Binterface, this);
+    JPanel shopVX=new JPanel();
+    JFrame map;
+    EndScreen endScreen;
 
-    public PlayerUI(ArrayList<String> IorderedSlots, ArrayList<String> IorderedSlotDirections, JPanel[][] IDslots, String IshopSlot) throws InterruptedException{
+    public PlayerUI(ArrayList<String> IorderedSlots, ArrayList<String> IorderedSlotDirections, JPanel[][] IDslots, String IshopSlot, JFrame Imap) throws InterruptedException{
 
+        map=Imap;
         orderedSlots=IorderedSlots;
         orderedSlotDirections=IorderedSlotDirections;
         Dslots=IDslots;
@@ -42,20 +47,29 @@ public class PlayerUI extends JFrame implements KeyListener{
         this.setSize(500,500);
         this.setResizable(false);
         this.addKeyListener(this);
+        this.setLocation(200,150);
+        bossBar.setStringPainted(true);
+        bossBar.setValue(300);
+        bossBar.setBounds(90,330,180,20);
+        bossBar.setForeground(Color.MAGENTA);
         player.setSize(new Dimension(10,10));
+        shopVX.setSize(new Dimension(50,50));
         Sinterface.setPreferredSize(new Dimension(100,500));
         Binterface.setPreferredSize(new Dimension(500,100));
         player.setBackground(Color.GREEN);
         Sinterface.setBackground(Color.GRAY);
         Binterface.setBackground(Color.GRAY);
+        shopVX.setBackground(Color.BLUE);
         playerInterface.setBackground(Color.DARK_GRAY);
         player.setLocation(200,200);
+        shopVX.setLocation(160,145);
         playerInterface.setLayout(null);
         Sinterface.setLayout(new GridLayout(3,1,1,1));
         updateRoom();
         this.add(playerInterface, BorderLayout.CENTER);
         this.add(Sinterface, BorderLayout.EAST);
         this.add(Binterface, BorderLayout.SOUTH);
+        playerInterface.add(bossBar);
         Sinterface.add(healthVX);
         Sinterface.add(armorVX);
         Sinterface.add(coinVX);
@@ -100,15 +114,22 @@ public class PlayerUI extends JFrame implements KeyListener{
         }
         if(roomSlot.equals(shopSlot)){
             inShopRoom=true;
+            this.add(shopVX);
         }else{
             inShopRoom=false;
+            try{
+            this.remove(shopVX);
+            }catch(Exception x){}
         }
         if(roomSlot.equals(orderedSlots.get(orderedSlots.size()-1))){
             inBossRoom=true;
+            bossBar.setVisible(true);
+            bossBar.setValue(boss.bossHealth);
             this.add(boss);
         }else{
             inBossRoom=false;
             try{
+                bossBar.setVisible(false);
                 this.remove(boss);
             }catch(Exception x){}
             boss.bossHealth=300;
@@ -206,6 +227,18 @@ public class PlayerUI extends JFrame implements KeyListener{
         player.setBackground(Color.RED);
         playerHealth-=1-armor;
         healthVX.updateHealth(playerHealth);
+        if(playerHealth<=0){
+            endScreen=new EndScreen("BAD");
+            gameOver();
+        }
+    }
+
+    public void gameOver(){
+        System.out.println("Boss Has Been Defeated!");
+        this.setVisible(false);
+        map.setVisible(false);
+        endScreen.setVisible(true);
+        endScreen.setLocation(this.getLocation());
     }
 
     @Override
@@ -280,6 +313,11 @@ public class PlayerUI extends JFrame implements KeyListener{
                       }
                       if(inBossRoom){
                           boss.playerAttackedSword(Binterface.slot.get(Binterface.equiped).damage, playerX, playerY);
+                          bossBar.setValue(boss.bossHealth);
+                          if(boss.checkDead()){
+                            endScreen=new EndScreen("GOOD");
+                            gameOver();
+                          }
                       }
                     }else if(Binterface.slot.get(Binterface.equiped).Item.equals("BOW")){
                         for(Enemy enemy: enemies){
@@ -287,6 +325,11 @@ public class PlayerUI extends JFrame implements KeyListener{
                         }
                         if(inBossRoom){
                             boss.playerAttackedBow(playerX, playerY, Binterface.slot.get(Binterface.equiped).damage);
+                            bossBar.setValue(boss.bossHealth);
+                            if(boss.checkDead()){
+                                endScreen=new EndScreen("GOOD");
+                                gameOver();
+                              }
                         }
                     }else if(Binterface.slot.get(Binterface.equiped).Item.equals("BOOTS")||Binterface.slot.get(Binterface.equiped).Item.equals("HELMET")||Binterface.slot.get(Binterface.equiped).Item.equals("SHIELD")){
                         if(Binterface.slot.get(Binterface.equiped).Item.equals("BOOTS")&&(bootsE)){

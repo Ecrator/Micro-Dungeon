@@ -15,8 +15,10 @@ public class MapGenerator{
     String Pdirection="NULL";
     ArrayList<String> orderedSlots=new ArrayList<>();
     ArrayList<String> orderedSlotDirections=new ArrayList<>();
+    JFrame map;
 
-    public MapGenerator(JPanel[][] IUslots) throws InterruptedException{
+    public MapGenerator(JPanel[][] IUslots, JFrame Imap) throws InterruptedException{
+        map=Imap;
         for(int o=0;o<10;o++){
             for(int k=0;k<10;k++){
                 IUslots[o][k].setBackground(Color.GRAY);
@@ -59,7 +61,7 @@ public class MapGenerator{
         
         drawPaths();
 
-        PlayerUI playerInterface=new PlayerUI(orderedSlots, orderedSlotDirections, Dslots, ShopSlot);
+        PlayerUI playerInterface=new PlayerUI(orderedSlots, orderedSlotDirections, Dslots, ShopSlot, map);
         //for(String slotD: orderedSlotDirections){
            // System.out.println(slotD);
         //}

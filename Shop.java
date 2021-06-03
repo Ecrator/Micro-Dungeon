@@ -20,6 +20,7 @@ public class Shop extends JFrame implements KeyListener{
         this.addKeyListener(this);
         this.setTitle("Shop");
         this.setLayout(new GridLayout(1,5,1,1));
+        this.setLocation(200,0);
         addItems();
     }
 

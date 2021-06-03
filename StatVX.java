@@ -34,7 +34,11 @@ public class StatVX extends JPanel{
 
     public void updateHealth(Double health){
         this.remove(healthCount);
-        healthCount.setText("                "+String.valueOf(health));
+        String space="                 ";
+        for(int i=0;i<(String.valueOf(health)).length();i++){
+            space=space.replaceFirst(" ", "");
+        }
+        healthCount.setText(space+String.valueOf(health));
         this.add(healthCount);
     }
 
@@ -47,11 +51,11 @@ public class StatVX extends JPanel{
     public void updateArmor(Double armor){
         this.remove(armorCount);
         if(armor>0.50){
-            armorCount.setText("                "+"3");
+            armorCount.setText("                3");
         }else if(armor>0.25){
-            armorCount.setText("                "+"2");
+            armorCount.setText("                2");
         }else if(armor>0.00){
-            armorCount.setText("                "+"1");
+            armorCount.setText("                1");
         }
         this.add(armorCount);
     }
