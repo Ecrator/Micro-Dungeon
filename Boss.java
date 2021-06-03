@@ -18,7 +18,7 @@ public class Boss extends JPanel{
         this.setSize(new Dimension(50,50));
         switch(random.nextInt(2)+1){
             case 1:
-            if(playerX<bossX){
+            if(playerX<bossX+25){
                 bossX-=15;
                 this.setLocation(bossX, bossY);
             }else{
@@ -27,7 +27,7 @@ public class Boss extends JPanel{
             }
             break;
             case 2:
-            if(playerY<bossY){
+            if(playerY<bossY+25){
                 bossY-=15;
                 this.setLocation(bossX, bossY);
             }else{

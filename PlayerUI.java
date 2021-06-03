@@ -32,7 +32,8 @@ public class PlayerUI extends JFrame implements KeyListener{
     Random random=new Random();
     AttackVX attackVisual=new AttackVX();
     Shop shop=new Shop(Binterface, this);
-    JPanel shopVX=new JPanel();
+    JLabel shopVX=new JLabel();
+    ImageIcon shopVXImage=new ImageIcon(getClass().getResource("Sprites\\Shop.png"));
     JFrame map;
     EndScreen endScreen;
 
@@ -53,27 +54,27 @@ public class PlayerUI extends JFrame implements KeyListener{
         bossBar.setBounds(90,330,180,20);
         bossBar.setForeground(Color.MAGENTA);
         player.setSize(new Dimension(10,10));
-        shopVX.setSize(new Dimension(50,50));
+        shopVX.setSize(new Dimension(265,265));
         Sinterface.setPreferredSize(new Dimension(100,500));
         Binterface.setPreferredSize(new Dimension(500,100));
         player.setBackground(Color.GREEN);
         Sinterface.setBackground(Color.GRAY);
         Binterface.setBackground(Color.GRAY);
-        shopVX.setBackground(Color.BLUE);
         playerInterface.setBackground(Color.DARK_GRAY);
         player.setLocation(200,200);
-        shopVX.setLocation(160,145);
+        shopVX.setLocation(118,50);
         playerInterface.setLayout(null);
         Sinterface.setLayout(new GridLayout(3,1,1,1));
         updateRoom();
         this.add(playerInterface, BorderLayout.CENTER);
         this.add(Sinterface, BorderLayout.EAST);
         this.add(Binterface, BorderLayout.SOUTH);
+        shopVX.setIcon(shopVXImage);
         playerInterface.add(bossBar);
         Sinterface.add(healthVX);
         Sinterface.add(armorVX);
         Sinterface.add(coinVX);
-        playerInterface.add(player);   
+        playerInterface.add(player);
         this.revalidate();
         this.setVisible(true);
     }
@@ -181,6 +182,7 @@ public class PlayerUI extends JFrame implements KeyListener{
 
     public void movePlayer(char direction){
         player.setBackground(Color.GREEN);
+        shopVX.setSize(new Dimension(265,265));
         try{
             switch(direction){
                 case 'w':
@@ -234,7 +236,6 @@ public class PlayerUI extends JFrame implements KeyListener{
     }
 
     public void gameOver(){
-        System.out.println("Boss Has Been Defeated!");
         this.setVisible(false);
         map.setVisible(false);
         endScreen.setVisible(true);
@@ -369,7 +370,6 @@ public class PlayerUI extends JFrame implements KeyListener{
                                 this.remove(enemy);
                                 coinVX.coins+=1;
                                 coinVX.updateCoins();
-                                this.remove(attackVisual);
                             }
                         }
                     }catch(Exception x){}
@@ -390,6 +390,13 @@ public class PlayerUI extends JFrame implements KeyListener{
                 }catch(Exception x){}
                 shop.open();
             }
+            break;
+            case 'm':
+            if(map.isVisible()){
+                map.setVisible(false);
+            }else{
+                map.setVisible(true);
+            }
         }
     }
 
@@ -404,4 +411,3 @@ public class PlayerUI extends JFrame implements KeyListener{
     @Override
     public void keyReleased(KeyEvent e) {}
 }
-
