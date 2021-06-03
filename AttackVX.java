@@ -1,13 +1,13 @@
 import javax.swing.*;
-import java.awt.*;
 
-public class AttackVX extends JPanel{
+public class AttackVX extends JLabel{
     
 
     public AttackVX(String weapon){
         if(weapon.equals("SWORD")){
             this.setSize(40,40);
-            this.setBackground(Color.BLUE);
+            ImageIcon icon=new ImageIcon(getClass().getResource("Sprites\\sword_swing.png"));
+            this.setIcon(icon);
         }
     }
     public AttackVX(){

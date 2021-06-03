@@ -66,6 +66,9 @@ public class EndScreen extends JFrame implements KeyListener{
                 try{
                     newGame();
                 }catch(InterruptedException x){}
+            }else{
+                this.dispose();
+                System.exit(0);
             }
         }
         

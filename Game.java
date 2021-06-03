@@ -11,6 +11,7 @@ public class Game {
         Map.setResizable(false);
         Map.setLocation(900,150);
         Map.setLayout(new GridLayout(10,10));
+        JLabel hint=new JLabel("C - controls");
         for(int i=9;i>-1;i--){
             for(int o=0;o<10;o++){
                 slots[o][i]=new JPanel();
@@ -20,6 +21,7 @@ public class Game {
             }
         }
         Map.setVisible(true);
+        slots[4][4].add(hint);
         MapGenerator mapGen=new MapGenerator(slots, Map);
     }
 

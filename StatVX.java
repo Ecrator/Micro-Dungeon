@@ -1,34 +1,33 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
-public class StatVX extends JPanel{
+public class StatVX extends JLabel{
     
     int coins=0;
-    JLabel coinCount=new JLabel("x 0");
+    JLabel coinCount=new JLabel("              x 0");
     JLabel armorCount=new JLabel("                "+"0");
     JLabel healthCount=new JLabel("                "+"3");
-    ArrayList<JPanel> units=new ArrayList<>();
 
     public StatVX(String type){
         if(type.equals("HEALTH")||type.equals("ARMOR")){
             switch(type){
                 case "HEALTH":
                 this.setLayout(new GridLayout(1,1));
-                this.setBackground(Color.RED);
                 this.add(healthCount);
+                ImageIcon Hicon=new ImageIcon(getClass().getResource("Sprites\\heart.png"));
+                this.setIcon(Hicon);
                 break;
                 case "ARMOR":
                 this.setLayout(new GridLayout(1,1));
-                this.setBackground(Color.LIGHT_GRAY);
                 this.add(armorCount);
+                ImageIcon Aicon=new ImageIcon(getClass().getResource("Sprites\\shield.png"));
+                this.setIcon(Aicon);
             }
         }else{ //Coin type
-            this.setLayout(new GridLayout(1,2));
-            units.add(new JPanel());
-            units.get(0).setBackground(Color.YELLOW);
-            this.add(units.get(0));
+            this.setLayout(new GridLayout(1,1));
             this.add(coinCount);
+            ImageIcon Cicon=new ImageIcon(getClass().getResource("Sprites\\coin.png"));
+                this.setIcon(Cicon);
         }
     }
 
@@ -44,7 +43,11 @@ public class StatVX extends JPanel{
 
     public void updateCoins(){
          this.remove(coinCount);
-         coinCount.setText("x "+coins);
+         String space="               ";
+        for(int i=0;i<(String.valueOf(coins)).length();i++){
+            space=space.replaceFirst(" ", "");
+        }
+         coinCount.setText(space+"x "+coins);
          this.add(coinCount);
     }
 
