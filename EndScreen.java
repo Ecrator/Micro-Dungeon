@@ -7,6 +7,7 @@ public class EndScreen extends JFrame implements KeyListener{
     JPanel restart=new JPanel();
     JPanel quit=new JPanel();
     int selected=1;
+    JLabel art=new JLabel("art");
     EndScreen(String ending){
         restart.add(new JLabel("RESTART"));
         restart.setLocation(200,250);
@@ -24,6 +25,15 @@ public class EndScreen extends JFrame implements KeyListener{
         this.add(restart);
         this.add(quit);
         this.addKeyListener(this);
+        art.setSize(500,500);
+        if(ending.equals("BAD")){
+            ImageIcon Bicon=new ImageIcon(getClass().getResource("Sprites\\bad_ending.png"));
+            art.setIcon(Bicon);
+        }else{
+            ImageIcon Gicon=new ImageIcon(getClass().getResource("Sprites\\good_ending.png"));
+            art.setIcon(Gicon);
+        }
+        this.add(art);
     }
 
     public void newGame() throws InterruptedException{
@@ -34,18 +44,18 @@ public class EndScreen extends JFrame implements KeyListener{
     public void keyTyped(KeyEvent e){}
     @Override
     public void keyPressed(KeyEvent e) {
-        restart.setBackground(Color.GRAY);
-        quit.setBackground(Color.GRAY);
         switch(e.getKeyCode()){
             case 38:
             switch(selected){
                 case 1:
                 selected=2;
                 quit.setBackground(Color.YELLOW);
+                restart.setBackground(Color.GRAY);
                 break;
                 case 2:
                 selected=1;
                 restart.setBackground(Color.YELLOW);
+                quit.setBackground(Color.GRAY);
             }
             break;
             case 40:
@@ -53,10 +63,12 @@ public class EndScreen extends JFrame implements KeyListener{
                 case 1:
                 selected=2;
                 quit.setBackground(Color.YELLOW);
+                restart.setBackground(Color.GRAY);
                 break;
                 case 2:
                 selected=1;
                 restart.setBackground(Color.YELLOW);
+                quit.setBackground(Color.GRAY);
             }
         }
         switch(e.getKeyChar()){
@@ -69,6 +81,32 @@ public class EndScreen extends JFrame implements KeyListener{
             }else{
                 this.dispose();
                 System.exit(0);
+            }
+            break;
+            case 'w':
+            switch(selected){
+                case 1:
+                selected=2;
+                quit.setBackground(Color.YELLOW);
+                restart.setBackground(Color.GRAY);
+                break;
+                case 2:
+                selected=1;
+                restart.setBackground(Color.YELLOW);
+                quit.setBackground(Color.GRAY);
+            }
+            break;
+            case 's':
+            switch(selected){
+                case 1:
+                selected=2;
+                quit.setBackground(Color.YELLOW);
+                restart.setBackground(Color.GRAY);
+                break;
+                case 2:
+                selected=1;
+                restart.setBackground(Color.YELLOW);
+                quit.setBackground(Color.GRAY);
             }
         }
         
