@@ -127,6 +127,7 @@ public class PlayerUI extends JFrame implements KeyListener{
             bossBar.setVisible(true);
             bossBar.setValue(boss.bossHealth);
             this.add(boss);
+            boss.setSize(50,50);
         }else{
             inBossRoom=false;
             try{
@@ -183,6 +184,7 @@ public class PlayerUI extends JFrame implements KeyListener{
     public void movePlayer(char direction){
         player.setBackground(Color.GREEN);
         shopVX.setSize(new Dimension(265,265));
+        shopVX.setLocation(118,50);
         try{
             switch(direction){
                 case 'w':
@@ -300,7 +302,7 @@ public class PlayerUI extends JFrame implements KeyListener{
                     //System.out.println(playerHealth);
                     //System.out.println(shopSlot);
                     //System.out.println(armor);
-                    System.out.println(boss.bossHealth);
+                    //System.out.println(boss.bossHealth);
 
             break;
             case 'e': Binterface.slot.get(Binterface.equiped).Use();
